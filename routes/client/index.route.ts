@@ -7,6 +7,7 @@ import { orderRoutes } from './order.route';
 import { userRoutes } from './user.route';
 
 import * as middleware from '../../middlewares/client/user.middleware';
+import { homePageRoute } from './home-page.router';
 
 const clientRoutes = (app: Express) => {
   app.use(middleware.infoUser);
@@ -17,6 +18,7 @@ const clientRoutes = (app: Express) => {
   app.use('/cart', cartRoutes);
   app.use('/order', orderRoutes);
   app.use('/user', userRoutes);
+  app.use('/', homePageRoute)
 }
 
 export default clientRoutes;
