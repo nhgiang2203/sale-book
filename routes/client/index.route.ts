@@ -18,7 +18,7 @@ const clientRoutes = (app: Express) => {
   app.use('/cart', cartRoutes);
   app.use('/order', orderRoutes);
   app.use('/user', userRoutes);
-  app.use('/', homePageRoute)
+  app.use('', homePageRoute)
 }
 
 export default clientRoutes;
