@@ -1,6 +1,6 @@
 //Lấy data in ra giao diện
 const drawListBook = () => {
-  fetch("http://localhost:3000/cart/list-json", {
+  fetch("https://sale-book.vercel.app/cart/list-json", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
