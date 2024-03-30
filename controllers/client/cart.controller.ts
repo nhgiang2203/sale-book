@@ -11,7 +11,6 @@ export const index = (req: Request, res: Response) => {
 
 //[POST]/cart/list-json
 export const listJson = async (req: Request, res: Response) => {
-  console.log(req.body)
   const books = req.body;
   
   for (const book of books) {
@@ -26,7 +25,6 @@ export const listJson = async (req: Request, res: Response) => {
       typeBook: book.typeBook
     })
 
-    console.log(dataBook);
     book['info'] = infoBook;
     book['price_special'] = dataBook['price'] * (1 - dataBook["discount"]/100);
     book['total'] = book.quantity * book['price_special'];

@@ -9,8 +9,9 @@ if(buttonDelete.length > 0){
   
       if(isConfirm) {
         const id = button.getAttribute('data-id');
+        const typeBook = button.getAttribute('data-type');
   
-        const action = `${path}/${id}?_method=DELETE`;
+        const action = `${path}/${id}/${typeBook}?_method=DELETE`;
   
         formDeleteItem.action = action;
         formDeleteItem.submit();

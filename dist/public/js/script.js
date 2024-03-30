@@ -4,7 +4,6 @@ if(radioContainer){
   radioContainer.forEach(button => {
     const input = button.querySelector('input[type="radio"]');
     input.addEventListener('click', () => {
-      console.log(input.id)
       var inputElement = document.getElementById(`${input.id}`);
       const parentForm = inputElement.closest('form');
       const bookId = parentForm.getAttribute('book-id');
@@ -16,7 +15,6 @@ if(radioContainer){
         .then(data => {
           if(data.code == 200 && data){
             const book = data.book;
-            console.log(book);
             if(book){
               const htmls = `    
               <div class="col-6">              
@@ -34,7 +32,8 @@ if(radioContainer){
                 <form form-add-to-cart book-id="${data.book.bookId}" typeBook="${data.book.typeBook}">
                   <input class="form-control mb-2" type="number" name="quantity" value="1" min="1" max="${book.stock}">
                   
-                  <button type="submit" class="btn btn-success btn-block">Thêm vào giỏ hàng</button>
+                  <button type="submit" class="btn-add-to-cart btn btn-success btn-block">Thêm vào giỏ hàng</button>
+
                 </form>
               </div>
 
@@ -50,6 +49,7 @@ if(radioContainer){
 }
 
 //End return type
+
 
 //Alert success add to cart
 const alertAddCartSuccess = () => {
@@ -68,15 +68,18 @@ const alertAddCartSuccess = () => {
 //End alert add cart success
 
 //Mini cart
-const showMiniCart = () => {
-  const cart = JSON.parse(localStorage.getItem('cart'));
-  if(cart){
-    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const miniCart = document.querySelector('[mini-cart]');
-    miniCart.innerHTML = totalQuantity;
+if(document.cookie){
+  const showMiniCart = () => {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    if(cart){
+      const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const miniCart = document.querySelector('[mini-cart]');
+      miniCart.innerHTML = totalQuantity;
+    }
   }
+  showMiniCart();
 }
-showMiniCart();
+
 //End mini cart
 
 //Cart
@@ -87,41 +90,59 @@ if(!cart) {
 }
 
 //Thêm book vào cart
+// Bắt sự kiện submit của form thêm giỏ hàng
 document.body.addEventListener("submit", (event) => {
-  if (event.target && event.target.matches("[form-add-to-cart]")) {
-    event.preventDefault();
+  // Kiểm tra xem form có thuộc tính form-add-to-cart không
+  if (event.target.matches("[form-add-to-cart]")) {
+      // Ngăn chặn hành vi mặc định của form
+      event.preventDefault();
 
-    const formAddToCart = event.target;
-    const quantity = parseInt(formAddToCart.elements.quantity.value);
-    const bookId = formAddToCart.getAttribute("book-id");
-    const typeBook = formAddToCart.getAttribute("typeBook");
+      // Kiểm tra xem cookie có tồn tại hay không
+      if (document.cookie) {
+          const formAddToCart = event.target;
+          const quantity = parseInt(formAddToCart.elements.quantity.value);
+          const bookId = formAddToCart.getAttribute("book-id");
+          const typeBook = formAddToCart.getAttribute("typeBook");
+          
+          // Kiểm tra các giá trị cần thiết
+          if (quantity > 0 && bookId && typeBook) {
+              // Lấy giỏ hàng từ localStorage
+              const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    if (quantity > 0 && bookId && typeBook) {
-      const cart = JSON.parse(localStorage.getItem("cart"));
-
-      const isExistBook = cart.findIndex(
-        (item) => item.bookId == bookId && item.typeBook == typeBook
-      );
-
-      if (isExistBook == -1) {
-        cart.push({
-          bookId: bookId,
-          typeBook: typeBook,
-          quantity: quantity,
-        });
+              // Kiểm tra xem sách đã tồn tại trong giỏ hàng chưa
+              const isExistBook = cart.findIndex(
+                  (item) => item.bookId == bookId && item.typeBook == typeBook
+              );
+      
+              if (isExistBook == -1) {
+                  // Nếu sách chưa tồn tại trong giỏ hàng, thêm vào
+                  cart.push({
+                      bookId: bookId,
+                      typeBook: typeBook,
+                      quantity: quantity,
+                  });
+              } else {
+                  // Nếu sách đã tồn tại trong giỏ hàng, cập nhật số lượng
+                  cart[isExistBook].quantity += quantity;
+              }
+      
+              // Lưu giỏ hàng mới vào localStorage
+              localStorage.setItem("cart", JSON.stringify(cart));
+      
+              // Thông báo thành công và cập nhật giỏ hàng mini
+              alertAddCartSuccess();
+              showMiniCart();
+          }
       } else {
-        cart[isExistBook].quantity = cart[isExistBook].quantity + quantity;
+          // Nếu không có cookie, chuyển hướng đến trang đăng nhập
+          window.location.href = '/user/login';
       }
-
-      console.log(cart);
-      localStorage.setItem("cart", JSON.stringify(cart));
-
-      alertAddCartSuccess();
-
-      showMiniCart();
-    }
   }
 });
+
+
+
+
 
 //Show alert
 const showAlert = document.querySelector("[show-alert]");
@@ -138,3 +159,59 @@ if(showAlert){
   });
 }
 //End show alert
+
+//Search suggest
+const boxSearch = document.querySelector('.box-search');
+if (boxSearch) {
+  const input = boxSearch.querySelector("input[name='keyword']");
+  const innerSuggest = boxSearch.querySelector('.inner-suggest');
+
+  input.addEventListener('keyup', () => {
+    const keyword = input.value;
+    const link = `/search/suggest?keyword=${keyword}`;
+
+    fetch(link)
+      .then(res => res.json())
+      .then(data => {
+        if(data && data.code == 200){
+          const books = data.books;
+          if(books.length > 0){
+            const htmls = books.map(item => {
+              return `
+                <a class="inner-item" href="/books/detail/${item.slug}">
+                  <div class="inner-image">
+                    <img src="${item.thumbnail}"/>
+                  </div>
+                  <div class="inner-info">
+                    <div class="inner-title">${item.title}</div>
+                    <div class="inner-author>
+                      <i class="fa-solid fa-pencil"></i> ${item.author}
+                    </div>
+                  </div>
+                </a>
+              `;
+            });
+
+            const innerList = boxSearch.querySelector(".inner-list");
+            innerList.innerHTML = htmls.join("");
+            innerSuggest.classList.add("show");
+          } else {
+            innerSuggest.classList.remove("show");
+          }
+        }
+      });
+  });
+}
+//End search suggest
+
+//Change radio typeBook
+const radioChange = (radio) => {
+  var radios = document.getElementsByName(radio.name);
+
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i] !== radio) {
+        radios[i].checked = false;
+      }
+    }
+}
+//End change radio typeBook

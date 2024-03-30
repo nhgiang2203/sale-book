@@ -31,6 +31,7 @@ const order_route_1 = require("./order.route");
 const user_route_1 = require("./user.route");
 const middleware = __importStar(require("../../middlewares/client/user.middleware"));
 const home_page_router_1 = require("./home-page.router");
+const search_route_1 = require("./search.route");
 const clientRoutes = (app) => {
     app.use(middleware.infoUser);
     app.use('/books', book_route_1.bookRoutes);
@@ -39,6 +40,7 @@ const clientRoutes = (app) => {
     app.use('/cart', cart_route_1.cartRoutes);
     app.use('/order', order_route_1.orderRoutes);
     app.use('/user', user_route_1.userRoutes);
+    app.use('/search', search_route_1.searchRoutes);
     app.use('', home_page_router_1.homePageRoute);
 };
 exports.default = clientRoutes;

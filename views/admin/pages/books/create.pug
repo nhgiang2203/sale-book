@@ -1,0 +1,162 @@
+extend ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  +alert-success(5000)
+  +alert-error(5000)
+
+  h1(mb-4) #{pageTitle}
+
+  form(
+    action=`/${prefixAdmin}/books/create`
+    method="POST"
+    enctype="multipart/form-data"
+  )
+
+    div(class="form-group")
+      label(for="title") Tiêu đề
+      input(
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        required 
+      )
+    
+    div(class="form-group")
+      label(for="topic") Chủ đề
+      select(
+        name="topicId"
+        id="topic"
+        class="form-control"
+        required
+      )
+        option(value="" disabled selected) --Chọn chủ đề--
+        each topic in topics 
+          option(value=topic.id) #{topic.title}
+
+
+    div(
+      class="form-group"
+      upload-image
+    )
+      label(for="thumbnail") Ảnh 
+      input(
+        type="file"
+        class="form-control-file"
+        id="thumbnail"
+        name="thumbnail"
+        accept="image/*"
+        upload-image-input
+      )
+      img(
+        src=""
+        class="image-preview"
+        upload-image-preview
+      )
+    
+    div(class="form-group")
+      label(for="author") Tác giả
+      input(
+        type="text"
+        class="form-control"
+        id="author"
+        name="author"
+        required
+      )
+
+    div(class="form-group")
+      label(for="publisher") Nhà xuất bản 
+      input(
+        type="text"
+        class="form-control"
+        id="publisher"
+        name="publisher"
+        required
+      )
+
+    div(class="form-group")
+      label(for="desc") Mô tả
+      textarea(
+        type="text"
+        class="form-control"
+        id="desc"
+        name="description"
+        row="5"
+        textarea-mce 
+      )
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="softcover"
+        name="typeBook"
+        value="softcover"
+        checked
+      )
+      label(for="softcover" class="form-check-label") Bản mềm 
+    
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="hardcover"
+        name="typeBook"
+        value="hardcover"
+      )
+      label(for="hardcover" class="form-check-label") Bản cứng 
+
+    div(class="form-group")
+      label(for="price") Giá
+      input(
+        type="text"
+        class="form-control"
+        id="price"
+        name="price"
+      )
+    
+    div(class="form-group")
+      label(for="discount") Giảm giá
+      input(
+        type="text"
+        class="form-control"
+        id="discount"
+        name="discount"
+      )
+
+    div(class="form-group")
+      label(for="stock") Số lượng
+      input(
+        type="text"
+        class="form-control"
+        id="stock"
+        name="stock"
+      )
+    
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="activeStatus"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="activeStatus" form="form-check-label") Hoạt động
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="inActiveStatus"
+        name="status"
+        value="inactive"
+      )
+      label(for="inActiveStatus" form="form-check-label") Dừng hoạt động
+    
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới

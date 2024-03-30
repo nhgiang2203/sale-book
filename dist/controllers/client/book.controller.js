@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.info = exports.index = void 0;
 const book_model_1 = __importDefault(require("../../models/book.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
+const category_model_1 = __importDefault(require("../../models/category.model"));
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const slug = req.params.slugCategory;
     const topic = yield topic_model_1.default.findOne({
@@ -35,11 +36,18 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.index = index;
 const info = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const book = yield book_model_1.default.findOne({
-        _id: req.params.bookId,
+        slug: req.params.slug,
         deleted: false,
         status: 'active'
     });
-    console.log(book);
+    const numType = yield category_model_1.default.find({
+        bookId: book.id,
+        deleted: false
+    });
+    book["typeBook"] = [];
+    for (const item of numType) {
+        book["typeBook"].push(item.typeBook);
+    }
     res.render('client/pages/books/detail', {
         pageTitle: book["title"],
         book: book

@@ -12,11 +12,11 @@ block main
         .col-6.mb-3 
           div(class="book-item")
             div(class="inner-image")
-              a(href=`/books/detail/${item.id}`) 
+              a(href=`/books/detail/${item.slug}`) 
                 img(src=item.thumbnail, alt=item.title) 
             div(class="inner-content")
               div(class="inner-title")
-                a(href=`/books/detail/${item.id}`) #{item.title}
+                a(href=`/books/detail/${item.slug}`) #{item.title}
               div(class="inner-publisher") <i class="fa-solid fa-pen"></i> #{item.publisher}
               div(class="inner-read") <i class="fa-solid fa-book"></i> #{item.purchase}
               div(class="inner-time") <i class="fa-regular fa-clock"></i> Hôm nay 

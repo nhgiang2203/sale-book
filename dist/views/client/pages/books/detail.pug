@@ -17,28 +17,24 @@ block main
           .inner-title #{book.title}
         
           div(class="inner-read") <i class="fa-solid fa-book-open-reader"></i> #{book.purchase}
-        
-          form(
-            form-format
-            book-id=`${book.id}`
-          )
-            .radio-container
-              input(
-                type="radio"
-                id="format-softcover"
-                name="format"
-                value="softcover"
-              )
-              label.radio-label(for="format-softcover") Bản mềm
 
-            .radio-container
-              input(
-                type="radio"
-                id="format-hardcover"
-                name="format"
-                value="hardcover"
-              )
-              label.radio-label(for="format-hardcover") Bản cứng
+          each item in book.typeBook 
+            form(
+              form-format
+              book-id=`${book.id}`
+            )
+              .radio-container
+                input(
+                  type="radio"
+                  id=`format-${item}`
+                  name="format"
+                  value=(item == "softcover" ? "softcover" : "hardcover")
+                  onchange="radioChange(this)"
+                )
+                label.radio-label(for=`format-${item}`) 
+                  | #{item === "softcover" ? "Bản mềm" : "Bản cứng"}
+
+            
             
           .inner-card
           
@@ -46,5 +42,5 @@ block main
         .col-12
           .inner-information
             .inner-text
-              <span> <b>Mô tả:</b> #{book.description}
+              <span> <b>Mô tả:</b> !{book.description}
   

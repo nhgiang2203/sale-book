@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Book from "../../models/book.model";
 import Topic from '../../models/topic.model';
+import Category from '../../models/category.model';
 
 //[GET]/books/:slugCategory
 export const index = async (req: Request, res: Response) => {
@@ -24,14 +25,24 @@ export const index = async (req: Request, res: Response) => {
   
 }
 
-//[GET]/books/detail/:bookId
+//[GET]/books/detail/:slug
 export const info = async (req: Request, res: Response) => {
   const book = await Book.findOne({
-    _id: req.params.bookId,
+    slug: req.params.slug,
     deleted: false,
     status: 'active'
   });
-  console.log(book);
+
+  const numType = await Category.find({
+    bookId: book.id,
+    deleted: false
+  });
+
+  book["typeBook"] = [];
+  for (const item of numType) {
+    book["typeBook"].push(item.typeBook);
+  }
+
   res.render('client/pages/books/detail', {
     pageTitle: book["title"],
     book: book

@@ -22,7 +22,6 @@ const index = (req, res) => {
 };
 exports.index = index;
 const listJson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     const books = req.body;
     for (const book of books) {
         const infoBook = yield book_model_1.default.findOne({
@@ -34,7 +33,6 @@ const listJson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             bookId: book.bookId,
             typeBook: book.typeBook
         });
-        console.log(dataBook);
         book['info'] = infoBook;
         book['price_special'] = dataBook['price'] * (1 - dataBook["discount"] / 100);
         book['total'] = book.quantity * book['price_special'];

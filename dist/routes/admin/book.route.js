@@ -22,10 +22,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bookRoutes = void 0;
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 const router = (0, express_1.Router)();
+const upload = (0, multer_1.default)();
 const controller = __importStar(require("../../controllers/admin/book.controller"));
+const middleware = __importStar(require("../../middlewares/admin/uploadToCloudinary.middleware"));
 router.get('/', controller.index);
+router.get('/edit/:id/:typeBook', controller.edit);
+router.patch('/edit/:id/:typeBook', upload.single("thumbnail"), middleware.uploadSingle, controller.editPatch);
+router.get('/create', controller.create);
+router.post('/create', upload.single("thumbnail"), middleware.uploadSingle, controller.createPost);
+router.get('/detail/:id/:typeBook', controller.detail);
+router.delete('/delete/:id/:typeBook', controller.deleteBook);
 exports.bookRoutes = router;

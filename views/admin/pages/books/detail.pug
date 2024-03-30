@@ -1,0 +1,53 @@
+extend ../../layouts/default.pug
+
+block main 
+
+  if(book.title)
+    h1(class="mb-4") #{book.title}
+  
+  if(book.thumbnail)
+    img(
+      src=book.thumbnail
+      style="width: 100px"
+    )
+  
+  if(book.topic)
+    div(class="mb-4") Chủ đề: #{book.topic}
+  
+  if(book.author)
+    div(class="mb-4") Tác giả: #{book.author}
+  
+  if(book.publisher)
+    div(class="mb-4") NXB: #{book.publisher}
+
+  if(book.typeBook)
+    div(class="mb-4") Loại: #{book.typeBook}
+  
+  if(book.price)
+    div(class="mb-4") Giá: #{book.price}$
+  
+  if(book.discount)
+    div(class="mb-4") Giảm giá: #{book.discount}%
+  
+  if(book.stock)
+    div(class="mb-4") Số lượng: #{book.stock}
+
+  if(book.status)
+    div(class="mb-4")
+      span Trạng thái 
+      if(book.status == "active")
+        span(class="badge badge-success") Hoạt động
+      else 
+        span(class="badge badge-danger") Dừng hoạt động
+
+  if(book.description)
+    div(class="mb-4") Mô tả: !{book.description}
+  
+  if(book.purchase)
+    div(class="mb-4") Lượt mua: #{book.purchase}
+
+  a(
+    href=`/${prefixAdmin}/books/edit/${book.id}/${book.typeBook}`
+    type="submit"
+    class="btn btn-warning"
+  ) Chỉnh sửa

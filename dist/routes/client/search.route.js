@@ -23,10 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookRoutes = void 0;
+exports.searchRoutes = void 0;
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const controller = __importStar(require("../../controllers/client/book.controller"));
-router.get('/:slugCategory', controller.index);
-router.get('/detail/:slug', controller.info);
-exports.bookRoutes = router;
+const controller = __importStar(require("../../controllers/client/search.controller"));
+router.get('/:type', controller.search);
+exports.searchRoutes = router;
