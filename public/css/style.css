@@ -206,11 +206,12 @@
   flex: 1;
   margin-bottom: 0; /* Reset any default margin or padding that might affect alignment */
 }
+
 .radio-container input[type="radio"] {
   margin-right: 5px; /* Điều chỉnh khoảng cách giữa các nút radio */
 }
 
-/* End tour-detail */
+/* End book-detail */
 
 /* Alert Add Cart Susscess */
 [alert-add-cart-success] {
@@ -362,5 +363,18 @@
   margin-bottom: 2px;
 }
 
+/*end suggest*/
 
-/* End Box-search */
+.book-item .inner-content .inner-author {
+  font-size: 13px;
+  font-weight: 500;
+  color: #282828;
+  margin-bottom: 2px;
+}
+
+.book-item .inner-content .inner-purchase {
+  font-size: 13px;
+  font-weight: 500;
+  color: #004cd0;
+  margin-bottom: 2px;
+}

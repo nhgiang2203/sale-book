@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main 
+  .container.my-3 
+    .row 
+      .col-12
+        +box-head(pageTitle)
+
+    .row 
+      each book in books 
+        .col-6.mb-3 
+          div(class="book-item")
+            div(class="inner-image")
+              a(href=`/books/detail/${book.slug}`)
+                img(src=book.thumbnail, alt=book.title)
+            div(class="inner-content")
+              div(class="inner-title")
+                a(href=`/books/detail/${book.slug}`) #{book.title}
+              div(class="inner-author") <i class="fa-solid fa-pen"> #{book.author}
+              div(class="inner-purchase") <i class="fa-solid fa-book"> #{book.purchase}
+
+
+
